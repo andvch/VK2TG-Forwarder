@@ -1,3 +1,6 @@
+import locale
+locale.setlocale(locale.LC_ALL, '')
+
 from datetime import datetime
 
 class Signer:

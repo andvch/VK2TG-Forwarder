@@ -1,3 +1,5 @@
 TG_TOKEN = ""
 VK_TOKEN = ""
 CHAT_ID = 123456
+
+DATE_FORMAT = "%d %B %Y в %H:%M %Z"

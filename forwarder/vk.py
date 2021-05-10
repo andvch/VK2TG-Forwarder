@@ -72,6 +72,41 @@ class VkApi:
         ).json()['response']
         return dict([(message['id'], message) for message in response['items']])
 
+    def get_names(self, ids):
+        users, groups = set(), set()
+        for vk_id in ids:
+            if vk_id > 0:
+                users.add(vk_id)
+            else:
+                groups.add(vk_id)
+
+        params = {'access_token': self.token,
+                'v': self.api_version,
+                'user_ids': ','.join(map(str, users)),
+                'fields': 'screen_name,sex'}
+        users_response = requests.get(
+                'https://api.vk.com/method/users.get',
+                params=params
+        ).json()['response']
+
+        params = {'access_token': self.token,
+                'v': self.api_version,
+                'group_ids': ','.join(map(str, groups))}
+        groups_response = requests.get(
+                'https://api.vk.com/method/groups.getById',
+                params=params
+        ).json()['response']
+
+        result = {}
+        for user in users_response:
+            name = f"{user['first_name']} {user['last_name']}".strip()
+            screen_name = user.get('screen_name', f"id{user['id']}")
+            result[user['id']] = (name, screen_name, user.get('sex', 0))
+        for group in groups_response:
+            screen_name = group.get('screen_name', f"public{group['id']}")
+            result[-group['id']] = (group['name'], screen_name, 0)
+        return result
+
     def send_message(self, text, user_id, reply_to=None):
         random_id = random.randint(-2**31,  2**31 - 1)
         params = {'access_token': self.token,

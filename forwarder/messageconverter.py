@@ -93,10 +93,15 @@ class ConvertedMessage:
 
         return a
 
-    def send(self, bot, tg_chat_id, signature=lambda *args, **kwargs: ''):
-        sig = signature(self.author_id, self.date, self.forwarders)
-        text = '\n\n'.join([self.text] +
-                self.text_attachments + ([sig] if sig else []))
+    def send(self, bot, tg_chat_id, signer=lambda *args, **kwargs: ''):
+        text = []
+        if self.text:
+            text.append(self.text)
+        text.extend(self.text_attachments)
+        sig = signer(self.author_id, self.date, self.forwarders)
+        if sig:
+            text.append(sig)
+        text = '\n\n'.join(text)
 
         ok_counter = 0
         if not self.attachment_groups:
@@ -108,7 +113,7 @@ class ConvertedMessage:
 
         for attachment_group in self.attachment_groups:
             if attachment_group is not self.attachment_groups[0]:
-                text = sig
+                text = sig if sig else None
 
             if len(attachment_group) == 1:
                 attachment = attachment_group[0]
@@ -161,8 +166,8 @@ class ConvertedForwardedMessages:
         for fwd_message in vk_message.get('fwd_messages', []):
             self.__parse(fwd_message, forwarders)
 
-    def send(self, bot, tg_chat_id, signature=lambda *args, **kwargs: ''):
+    def send(self, bot, tg_chat_id, signer=lambda *args, **kwargs: ''):
         ok_counter = 0
         for message in self.messages:
-            ok_counter += message.send(bot, tg_chat_id, signature)
+            ok_counter += message.send(bot, tg_chat_id, signer)
         return ok_counter

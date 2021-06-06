@@ -14,45 +14,56 @@ tg_vk_dict = {}
 vk_tg_dict = {}
 
 def start(bot, _):
+    """
+    Удаляем старые связки для данного аккаунта в Telegram, если они существовали, и генерируем рандомный
+    пароль для его ввода в ВК.
+    """
     if tg_cd_dict.get(bot.effective_user.id):
-        del cd_tg_dict[tg_cd_dict[bot.effective_user.id]]
-        del tg_cd_dict[bot.effective_user.id]
+        cd_tg_dict.pop(tg_cd_dict[bot.effective_user.id])
+        tg_cd_dict.pop(bot.effective_user.id)
     if tg_vk_dict.get(bot.effective_user.id):
-        del vk_tg_dict[tg_vk_dict[bot.effective_user.id]]
-        del tg_vk_dict[bot.effective_user.id]
-        bot.message.reply_text('Ваша прошлая связка "ВК-Telegram" была удалена.')
-    code = ''.join(choice(ascii_letters + digits) for i in range(8))
+        vk_tg_dict.pop(tg_vk_dict[bot.effective_user.id])
+        tg_vk_dict.pop(bot.effective_user.id)
+        bot.message.reply_text(TG_DELETED_OLD_LINKS_MESSAGE)
+
+    code = ''.join(choice(ascii_letters + digits) for i in range(PASSWORD_LENGTH))
     tg_cd_dict[bot.effective_user.id] = code
     cd_tg_dict[code] = bot.effective_user.id
     
-    bot.message.reply_text('''Чтобы получать сообщения из ВК в данный диалог, напишите пароль из следующего \
-сообщения боту в ВК: https://vk.com/im?sel=-204978468.
-Чтобы удалить свои данные, нажмите команду "/detach".''')
+    bot.message.reply_text(TG_SUCCESS_REGISTRATION_MESSAGE)
     bot.message.reply_text(code)
 
+
 def detach(bot, _):
-    if (tg_vk_dict.get(bot.effective_user.id) is None) and (tg_cd_dict.get(bot.effective_user.id) is None):
-        bot.message.reply_text('Ваши данные отсутствуют. Для того, чтобы зарегистрироваться, \
-нажмите команду "/start".')
+    """
+    Удаляем старые связки для данного аккаунта в Telegram, если они существовали.
+    """
+    if (bot.effective_user.id not in tg_vk_dict) and (bot.effective_user.id not in tg_cd_dict):
+        bot.message.reply_text(TG_FAILED_DETACH_MESSAGE)
     else:
-        if tg_vk_dict.get(bot.effective_user.id):
-            del vk_tg_dict[tg_vk_dict[bot.effective_user.id]]
-            del tg_vk_dict[bot.effective_user.id]
         if tg_cd_dict.get(bot.effective_user.id):
-            del cd_tg_dict[tg_cd_dict[bot.effective_user.id]]
-            del tg_cd_dict[bot.effective_user.id]
-        bot.message.reply_text('Ваши данные были удалены. Для того, чтобы снова зарегистрироваться, \
-нажмите команду "/start".')
+            cd_tg_dict.pop(tg_cd_dict[bot.effective_user.id])
+            tg_cd_dict.pop(bot.effective_user.id)
+        if tg_vk_dict.get(bot.effective_user.id):
+            vk_tg_dict.pop(tg_vk_dict[bot.effective_user.id])
+            tg_vk_dict.pop(bot.effective_user.id)
+        bot.message.reply_text(TG_SUCCESS_DETACH_MESSAGE)
+
 
 def print_answer(bot, _):
+    """
+    Если сообщение польнователя не команда, приглашаем создать новую связку ВК-Telegram.
+    """
     if tg_vk_dict.get(bot.effective_user.id):
-        bot.message.reply_text('''Если вы хотите изменить адресанта сообщений в ВК, нажмите команду "/start".''')
+        bot.message.reply_text(TG_RE_REGISTRATION_MESSAGE)
     else:
-        bot.message.reply_text('''Здравствуйте!
-Чтобы зарегистрироваться и иметь возможность пересылать себе сообщения из ВК\
-(подробнее: https://github.com/andvch/VK2TG-Forwarder) нажмите команду "/start".''')
+        bot.message.reply_text(TG_NEW_REGISTRATION_MESSAGE)
+
 
 def vk_mainloop(vk, bot):
+    """
+    Обрабатываем сообщения, пришедшие боту в ВК.
+    """
     for vk_message in vk.listen():
         # print(vk_message)
         if vk_message['from_id'] < 0:
@@ -60,20 +71,19 @@ def vk_mainloop(vk, bot):
 
         if cd_tg_dict.get(vk_message['text']):
             if vk_tg_dict.get(vk_message['from_id']):
-                del tg_vk_dict[vk_tg_dict[vk_message['from_id']]] # Удаляем старую связку telegram-vk
+                tg_vk_dict.pop(vk_tg_dict[vk_message['from_id']])
             vk_tg_dict[vk_message['from_id']] = cd_tg_dict[vk_message['text']]
             tg_vk_dict[cd_tg_dict[vk_message['text']]] = vk_message['from_id']
-            del tg_cd_dict[cd_tg_dict[vk_message['text']]] # Удаляем связку telegram-code, так как пароль был использован
-            del cd_tg_dict[vk_message['text']] # Удаляем связку telegram-code, так как пароль был использован
+            tg_cd_dict.pop(cd_tg_dict[vk_message['text']])
+            cd_tg_dict.pop(vk_message['text'])
             vk.send_message(
-                    '''Поздравляем!
-Теперь вы можете писать сюда сообщения и они будут пересланы зарегистрированному вами аккаунту в Telegram.''',
+                    VK_SUCCESS_REGISTRATION_MESSAGE,
                     vk_message['from_id'])
             continue
         
-        if vk_tg_dict.get(vk_message['from_id']) is None:
+        if vk_message['from_id'] not in vk_tg_dict:
             vk.send_message(
-                    f'Вы не являетесь зарегистрированным участником. Напишите боту в Telegram: {bot.link}',
+                    VK_FAILED_REGISTRATION_MESSAGE + bot.link,
                     vk_message['from_id'])
             continue
 

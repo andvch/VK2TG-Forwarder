@@ -15,13 +15,13 @@ vk_tg_dict = {}
 
 def start(bot, _):
     """
-    Удаляем старые связки для данного аккаунта в Telegram, если они существовали, и генерируем рандомный
-    пароль для его ввода в ВК.
+    Удаляем старые связки для данного аккаунта в Telegram, если они существовали, и генерируем
+    рандомный пароль для его ввода в ВК.
     """
-    if tg_cd_dict.get(bot.effective_user.id):
+    if bot.effective_user.id in tg_cd_dict:
         cd_tg_dict.pop(tg_cd_dict[bot.effective_user.id])
         tg_cd_dict.pop(bot.effective_user.id)
-    if tg_vk_dict.get(bot.effective_user.id):
+    if bot.effective_user.id in tg_vk_dict:
         vk_tg_dict.pop(tg_vk_dict[bot.effective_user.id])
         tg_vk_dict.pop(bot.effective_user.id)
         bot.message.reply_text(TG_DELETED_OLD_LINKS_MESSAGE)
@@ -41,10 +41,10 @@ def detach(bot, _):
     if (bot.effective_user.id not in tg_vk_dict) and (bot.effective_user.id not in tg_cd_dict):
         bot.message.reply_text(TG_FAILED_DETACH_MESSAGE)
     else:
-        if tg_cd_dict.get(bot.effective_user.id):
+        if bot.effective_user.id in tg_cd_dict:
             cd_tg_dict.pop(tg_cd_dict[bot.effective_user.id])
             tg_cd_dict.pop(bot.effective_user.id)
-        if tg_vk_dict.get(bot.effective_user.id):
+        if bot.effective_user.id in tg_vk_dict:
             vk_tg_dict.pop(tg_vk_dict[bot.effective_user.id])
             tg_vk_dict.pop(bot.effective_user.id)
         bot.message.reply_text(TG_SUCCESS_DETACH_MESSAGE)
@@ -54,7 +54,7 @@ def print_answer(bot, _):
     """
     Если сообщение польнователя не команда, приглашаем создать новую связку ВК-Telegram.
     """
-    if tg_vk_dict.get(bot.effective_user.id):
+    if bot.effective_user.id in tg_vk_dict:
         bot.message.reply_text(TG_RE_REGISTRATION_MESSAGE)
     else:
         bot.message.reply_text(TG_NEW_REGISTRATION_MESSAGE)
@@ -69,8 +69,8 @@ def vk_mainloop(vk, bot):
         if vk_message['from_id'] < 0:
             continue
 
-        if cd_tg_dict.get(vk_message['text']):
-            if vk_tg_dict.get(vk_message['from_id']):
+        if vk_message['text'] in cd_tg_dict:
+            if vk_message['from_id'] in vk_tg_dict:
                 tg_vk_dict.pop(vk_tg_dict[vk_message['from_id']])
             vk_tg_dict[vk_message['from_id']] = cd_tg_dict[vk_message['text']]
             tg_vk_dict[cd_tg_dict[vk_message['text']]] = vk_message['from_id']

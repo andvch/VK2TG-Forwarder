@@ -1,9 +1,10 @@
-from telegram import (
-    InputMediaPhoto,
-    InputMediaVideo,
-    InputMediaAudio,
-    InputMediaDocument
-)
+# from telegram import (
+#     InputMediaPhoto,
+#     InputMediaVideo,
+#     InputMediaAudio,
+#     InputMediaDocument
+# )
+
 
 class Attachment:
     def __init__(self, type, **kwargs):
@@ -18,6 +19,7 @@ class Attachment:
                 p.pop(key)
         p.pop('type')
         return p
+
 
 class ConvertedMessage:
     def __init__(self, vk_message, attachment_group_limit=10, forwarders=[]):
@@ -48,9 +50,7 @@ class ConvertedMessage:
         self.attachment_groups = []
         for grouped_media in (photos, documents, audio):
             for i in range(0, len(grouped_media), attachment_group_limit):
-                self.attachment_groups.append(
-                        grouped_media[i: i + attachment_group_limit]
-                )
+                self.attachment_groups.append(grouped_media[i: i + attachment_group_limit])
         self.attachment_groups.extend(non_grouped_media)
 
     def __bool__(self):
@@ -119,7 +119,7 @@ class ConvertedMessage:
                 attachment = attachment_group[0]
                 try:
                     eval(f"bot.send_{attachment.type}"
-                            "(tg_chat_id, caption=text, **attachment.params)")
+                         "(tg_chat_id, caption=text, **attachment.params)")
                     ok_counter += 1
                 except:
                     pass
@@ -132,9 +132,7 @@ class ConvertedMessage:
                 if attachment is attachment_group[0]:
                     params['caption'] = text
                 try:
-                    media.append(
-                            eval(f"InputMedia{attachment.type.title()}(**params)")
-                    )
+                    media.append(eval(f"InputMedia{attachment.type.title()}(**params)"))
                 except:
                     pass
 
@@ -145,6 +143,7 @@ class ConvertedMessage:
                 pass
 
         return ok_counter
+
 
 class ConvertedForwardedMessages:
     def __init__(self, vk_message):

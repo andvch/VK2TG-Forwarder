@@ -13,10 +13,11 @@ tg_cd_dict = {}
 tg_vk_dict = {}
 vk_tg_dict = {}
 
+
 def start(bot, _):
     """
-    Удаляем старые связки для данного аккаунта в Telegram, если они существовали, и генерируем
-    рандомный пароль для его ввода в ВК.
+    Удаляем старые связки для данного аккаунта в Telegram, если они
+    существовали, и генерируем рандомный пароль для его ввода в ВК.
     """
     if bot.effective_user.id in tg_cd_dict:
         cd_tg_dict.pop(tg_cd_dict[bot.effective_user.id])
@@ -29,7 +30,7 @@ def start(bot, _):
     code = ''.join(choice(ascii_letters + digits) for i in range(PASSWORD_LENGTH))
     tg_cd_dict[bot.effective_user.id] = code
     cd_tg_dict[code] = bot.effective_user.id
-    
+
     bot.message.reply_text(TG_SUCCESS_REGISTRATION_MESSAGE)
     bot.message.reply_text(code)
 
@@ -76,30 +77,26 @@ def vk_mainloop(vk, bot):
             tg_vk_dict[cd_tg_dict[vk_message['text']]] = vk_message['from_id']
             tg_cd_dict.pop(cd_tg_dict[vk_message['text']])
             cd_tg_dict.pop(vk_message['text'])
-            vk.send_message(
-                    VK_SUCCESS_REGISTRATION_MESSAGE,
-                    vk_message['from_id'])
-            continue
-        
-        if vk_message['from_id'] not in vk_tg_dict:
-            vk.send_message(
-                    VK_FAILED_REGISTRATION_MESSAGE + bot.link,
-                    vk_message['from_id'])
+            vk.send_message(VK_SUCCESS_REGISTRATION_MESSAGE,
+                            vk_message['from_id'])
             continue
 
-            
+        if vk_message['from_id'] not in vk_tg_dict:
+            vk.send_message(VK_FAILED_REGISTRATION_MESSAGE + bot.link,
+                            vk_message['from_id'])
+            continue
+
         message = ConvertedForwardedMessages(vk_message)
-        #vk.send_message(
-        #        f'В какой чат переслать {message.num_messages_to_send} сообщений?',
-        #        vk_message['from_id'],
-        #        vk_message['id'])
+#        vk.send_message(f'В какой чат переслать {message.num_messages_to_send} сообщений?',
+#                         vk_message['from_id'],
+#                         vk_message['id'])
 
         sig = Signer(vk.get_names(message.author_ids), date_format=DATE_FORMAT)
         num = message.send(bot, vk_tg_dict[vk_message['from_id']], sig)
-        vk.send_message(
-                f'Доставлено {num} из {message.num_messages_to_send} сообщений',
-                vk_message['from_id'],
-                vk_message['id'])
+        vk.send_message(f'Доставлено {num} из {message.num_messages_to_send} сообщений',
+                        vk_message['from_id'],
+                        vk_message['id'])
+
 
 if __name__ == "__main__":
     vk = VkApi(VK_TOKEN)
@@ -112,7 +109,7 @@ if __name__ == "__main__":
     dispatcher.add_handler(CommandHandler("detach", detach))
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, print_answer))
     updater.start_polling()
-    
+
     vk_mainloop(vk, updater.bot)
-    #vk_thread = threading.Thread(target=vk_mainloop)
-    #tg_thread = threading.Thread(target=tg_mainloop)
+#    vk_thread = threading.Thread(target=vk_mainloop)
+#    tg_thread = threading.Thread(target=tg_mainloop)

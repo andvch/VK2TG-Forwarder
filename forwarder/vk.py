@@ -1,6 +1,7 @@
 import requests
 import random
 
+
 class VkApi:
     api_version = '5.130'
     lp_version = '3'
@@ -12,11 +13,11 @@ class VkApi:
         self.__get_server()
 
     def __get_server(self, update_ts=True):
-        params = {'access_token': self.token, 'v': self.api_version, 'lp_version': self.lp_version}
-        response = requests.get(
-                'https://api.vk.com/method/messages.getLongPollServer',
-                params=params
-        ).json()['response']
+        params = {'access_token': self.token,
+                  'v': self.api_version,
+                  'lp_version': self.lp_version}
+        response = requests.get('https://api.vk.com/method/messages.getLongPollServer',
+                                params=params).json()['response']
 
         self.key = response['key']
         self.server = response['server']
@@ -25,19 +26,15 @@ class VkApi:
 
     def listen(self):
         while True:
-            params = {
-                    'act': 'a_check',
-                    'key': self.key,
-                    'ts': self.ts,
-                    'wait': self.wait,
-                    'mode': '0',
-                    'version': self.lp_version
-                    }
-            response = requests.get(
-                f'https://{self.server}',
-                params=params,
-                timeout=self.wait + 5
-            ).json()
+            params = {'act': 'a_check',
+                      'key': self.key,
+                      'ts': self.ts,
+                      'wait': self.wait,
+                      'mode': '0',
+                      'version': self.lp_version}
+            response = requests.get(f'https://{self.server}',
+                                    params=params,
+                                    timeout=self.wait + 5).json()
 
             if 'failed' in response:
                 # https://vk.com/dev/using_longpoll?f=2.%20Answer%20Format
@@ -64,12 +61,10 @@ class VkApi:
 
     def get_messages(self, message_ids):
         params = {'access_token': self.token,
-                'v': self.api_version,
-                'message_ids': ','.join(map(str, set(message_ids)))}
-        response = requests.get(
-                'https://api.vk.com/method/messages.getById',
-                params=params
-        ).json()['response']
+                  'v': self.api_version,
+                  'message_ids': ','.join(map(str, set(message_ids)))}
+        response = requests.get('https://api.vk.com/method/messages.getById',
+                                params=params).json()['response']
         return dict([(message['id'], message) for message in response['items']])
 
     def get_names(self, ids):
@@ -81,21 +76,17 @@ class VkApi:
                 groups.add(vk_id)
 
         params = {'access_token': self.token,
-                'v': self.api_version,
-                'user_ids': ','.join(map(str, users)),
-                'fields': 'screen_name,sex'}
-        users_response = requests.get(
-                'https://api.vk.com/method/users.get',
-                params=params
-        ).json()['response']
+                  'v': self.api_version,
+                  'user_ids': ','.join(map(str, users)),
+                  'fields': 'screen_name,sex'}
+        users_response = requests.get('https://api.vk.com/method/users.get',
+                                      params=params).json()['response']
 
         params = {'access_token': self.token,
-                'v': self.api_version,
-                'group_ids': ','.join(map(str, groups))}
-        groups_response = requests.get(
-                'https://api.vk.com/method/groups.getById',
-                params=params
-        ).json()['response']
+                  'v': self.api_version,
+                  'group_ids': ','.join(map(str, groups))}
+        groups_response = requests.get('https://api.vk.com/method/groups.getById',
+                                       params=params).json()['response']
 
         result = {}
         for user in users_response:
@@ -108,15 +99,13 @@ class VkApi:
         return result
 
     def send_message(self, text, user_id, reply_to=None):
-        random_id = random.randint(-2**31,  2**31 - 1)
+        random_id = random.randint(-2**31, 2**31 - 1)
         params = {'access_token': self.token,
-                'v': self.api_version,
-                'message': text,
-                'user_id': user_id,
-                'random_id': random_id}
+                  'v': self.api_version,
+                  'message': text,
+                  'user_id': user_id,
+                  'random_id': random_id}
         if reply_to is not None:
             params['reply_to'] = reply_to
-        requests.get(
-                'https://api.vk.com/method/messages.send',
-                params=params
-        )
+        requests.get('https://api.vk.com/method/messages.send',
+                     params=params)

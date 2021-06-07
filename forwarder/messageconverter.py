@@ -1,9 +1,9 @@
-# from telegram import (
-#     InputMediaPhoto,
-#     InputMediaVideo,
-#     InputMediaAudio,
-#     InputMediaDocument
-# )
+from telegram import (  # noqa: F401
+    InputMediaPhoto,
+    InputMediaVideo,
+    InputMediaAudio,
+    InputMediaDocument
+)
 
 
 class Attachment:
@@ -57,7 +57,10 @@ class ConvertedMessage:
         return bool(self.text or self.text_attachments or self.attachment_groups)
 
     @staticmethod
-    def parse_attachment(data):
+    def parse_attachment(
+            data,
+            file_downloader=lambda url: requests.get(url).content
+    ):
         a = Attachment(data['type'])
         data = data[a.type]
 
@@ -76,17 +79,69 @@ class ConvertedMessage:
                     best_size = width * height
                     a.photo = url
 
+        elif a.type == 'audio':
+            a.title = data.get('title')
+            a.performer = data.get('artist')
+            a.duration = data.get('duration')
+            a.audio = file_downloader(data['url'])
+            a.filename = f"{data.get('title', 'audio')}.mp3"
+
         elif a.type == 'doc':
+            a.type = 'document'
             ext = data.get('ext') or data['title'].split('.')[-1]
             if ext == 'gif':
                 a.type = 'animation'
                 a.animation = data['url']
-            else:
-                a.type = 'document'
+            elif ext in ('pdf', 'zip'):  # https://core.telegram.org/bots/api#sending-files
                 a.document = data['url']
+            else:
+                a.document = file_downloader(data['url'])
+                a.filename = data['title']
+
+        elif a.type == 'audio_message':
+            a.duration = data.get('duration')
+            if 'link_ogg' in data:
+                a.type = 'voice'
+                a.voice = data['link_ogg']
+            else:
+                a.type = 'audio'
+                a.audio = file_downloader(data['link_mp3'])
+                a.filename = 'Voice message.mp3'
+
+        elif a.type == 'poll':
+            poll = [f"*{data['question']}*"]
+            for answer in data['answers']:
+                rate = round(answer['rate'])
+                votes = answer['votes']
+                scale = ('=' * (1 + rate // 10)).ljust(10)[:10]
+                poll.append(f"{answer['text']}\n`{scale} {rate}% ({votes})`")
+            a.text = '\n\n'.join(poll)
+
+        elif a.type == 'graffiti':
+            a.type = 'photo'
+            a.photo = data['url']
+
+        elif a.type == 'video':
+            a.type = 'link'
+            title = data['title']
+            url = f"https://vk.com/video{data['owner_id']}_{data['id']}"
+            a.text = f"_Видео_ [{title}]({url})"
+            # FIXME: broken for private videos
 
         elif a.type == 'link':
             a.text = f"_Ссылка_ [{data.get('title', 'link')}]({data['url']})"
+
+        elif a.type == 'wall':
+            a.type = 'link'
+            wall_id = f"{data.get('owner_id') or data['to_id']}_{data['id']}"
+            url = f"https://vk.com/wall{wall_id}"
+            a.text = f"[Запись на стене]({url})"
+
+        elif a.type == 'wall_reply':
+            a.type = 'link'
+            wall_id = f"{data.get('owner_id') or data['to_id']}_{data['post_id']}"
+            url = f"https://vk.com/wall{wall_id}?reply={data['id']}"
+            a.text = f"[Комментарий к записи]({url})"
 
         else:
             a.type = 'unknown'
@@ -164,6 +219,9 @@ class ConvertedForwardedMessages:
             self.__parse(vk_message['reply_message'], forwarders)
         for fwd_message in vk_message.get('fwd_messages', []):
             self.__parse(fwd_message, forwarders)
+
+    def __bool__(self):
+        return bool(self.num_messages_to_send)
 
     def send(self, bot, tg_chat_id, signer=lambda *args, **kwargs: ''):
         ok_counter = 0

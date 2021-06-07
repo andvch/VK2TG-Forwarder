@@ -5,6 +5,8 @@ from telegram import (  # noqa: F401
     InputMediaDocument
 )
 
+import requests
+
 
 class Attachment:
     def __init__(self, type, **kwargs):

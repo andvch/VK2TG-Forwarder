@@ -1,3 +1,5 @@
+"""Классы для обработки вложений в сообщения."""
+
 from telegram import (  # noqa: F401
     InputMediaPhoto,
     InputMediaVideo,

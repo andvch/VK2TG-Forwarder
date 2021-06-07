@@ -1,8 +1,16 @@
+"""Описание класса для работы бота в ВК."""
+
 import requests
 import random
 
 
 class VkApi:
+    """Класс обеспечивает работу бота в ВК.
+
+    Args:
+        token (:obj:`str`): Уникальный код ВК-бота.
+        wait (:obj:`int`, optional):.
+    """
     api_version = '5.130'
     lp_version = '3'
     new_message_event_type = 4

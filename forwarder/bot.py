@@ -6,9 +6,20 @@ from telegram.ext import Updater, Defaults, CommandHandler, MessageHandler, Filt
 from vk import VkApi
 from messageconverter import ConvertedForwardedMessages
 from signer import Signer
-
-with open('config') as f:
-    exec(f.read())
+from config import (
+    TG_TOKEN,
+    VK_TOKEN,
+    DATE_FORMAT,
+    PASSWORD_LENGTH,
+    TG_DELETED_OLD_LINKS_MESSAGE,
+    TG_SUCCESS_REGISTRATION_MESSAGE,
+    TG_FAILED_DETACH_MESSAGE,
+    TG_SUCCESS_DETACH_MESSAGE,
+    TG_RE_REGISTRATION_MESSAGE,
+    TG_NEW_REGISTRATION_MESSAGE,
+    VK_SUCCESS_REGISTRATION_MESSAGE,
+    VK_FAILED_REGISTRATION_MESSAGE
+)
 
 cd_tg_dict = {}
 tg_cd_dict = {}

@@ -102,7 +102,8 @@ def vk_mainloop(vk, bot):
                         vk_message['id'])
 
 
-if __name__ == "__main__":
+def main():
+    """Запускает 2 потока для обработки сообщений в Телеграме и в ВК."""
     vk = VkApi(VK_TOKEN)
     updater = Updater(TG_TOKEN, defaults=Defaults(
         parse_mode='Markdown',
@@ -115,3 +116,6 @@ if __name__ == "__main__":
     updater.start_polling()
 
     vk_mainloop(vk, updater.bot)
+
+if __name__ == "__main__":
+    main()

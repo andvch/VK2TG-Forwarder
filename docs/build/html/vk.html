@@ -168,7 +168,7 @@
 <p>Класс обеспечивает работу бота в ВК.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>token (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Уникальный код ВК-бота.
-wait (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, optional):.</p>
+wait (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, optional): Время timeout (сколько секунд ждать прежде, чеи сдаться).</p>
 </dd>
 </dl>
 <dl class="py attribute">
@@ -179,17 +179,20 @@ wait (<code class="xref py py-obj docutils literal notranslate"><span class="pre
 <dl class="py method">
 <dt class="sig sig-object py" id="vk.VkApi.get_messages">
 <span class="sig-name descname"><span class="pre">get_messages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vk.VkApi.get_messages" title="Ссылка на это определение">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Парсим вложенные сообщения.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="vk.VkApi.get_names">
 <span class="sig-name descname"><span class="pre">get_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vk.VkApi.get_names" title="Ссылка на это определение">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Парсим имена из вложенных сообщений.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="vk.VkApi.listen">
 <span class="sig-name descname"><span class="pre">listen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vk.VkApi.listen" title="Ссылка на это определение">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Мониторинг пришедших сообщений в ВК.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="vk.VkApi.lp_version">
@@ -204,7 +207,8 @@ wait (<code class="xref py py-obj docutils literal notranslate"><span class="pre
 <dl class="py method">
 <dt class="sig sig-object py" id="vk.VkApi.send_message">
 <span class="sig-name descname"><span class="pre">send_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reply_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vk.VkApi.send_message" title="Ссылка на это определение">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Отправляем сообщения в ВК.</p>
+</dd></dl>
 
 </dd></dl>
 

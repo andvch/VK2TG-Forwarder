@@ -1,0 +1,6 @@
+__pycache__
+build
+dist
+*.mo
+*.pot
+*.egg-info

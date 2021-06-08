@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, call
 from forwarder.messageconverter import ConvertedForwardedMessages
 
 tg_chat_id = 555
@@ -36,7 +36,7 @@ def test_sending_order():
     bot = MagicMock()
     msg.send(bot, tg_chat_id)
     for i in range(msg.num_messages_to_send):
-        assert bot.method_calls[i].args == (tg_chat_id, str(i))
+        assert bot.method_calls[i] == call.send_message(tg_chat_id, str(i))
 
 
 def test_signature():
@@ -44,10 +44,10 @@ def test_signature():
     bot, signer = MagicMock(), MagicMock(return_value='sig')
     msg.send(bot, tg_chat_id, signer)
     assert len(signer.call_args_list) == 7
-    assert signer.call_args_list[0].args == (123, 10001, [])
-    assert signer.call_args_list[1].args == (1, 1001, [(123, 10001)])
-    assert signer.call_args_list[2].args == (12, 1000, [(123, 10001)])
-    assert signer.call_args_list[3].args == (33, 100, [(12, 1000), (123, 10001)])
-    assert signer.call_args_list[4].args == (1, 0, [(12, 101), (12, 1000), (123, 10001)])
-    assert signer.call_args_list[5].args == (33, 102, [(12, 1000), (123, 10001)])
-    assert signer.call_args_list[6].args == (12, 101, [(123, 10001)])
+    assert signer.call_args_list[0] == ((123, 10001, []),)
+    assert signer.call_args_list[1] == ((1, 1001, [(123, 10001)]),)
+    assert signer.call_args_list[2] == ((12, 1000, [(123, 10001)]),)
+    assert signer.call_args_list[3] == ((33, 100, [(12, 1000), (123, 10001)]),)
+    assert signer.call_args_list[4] == ((1, 0, [(12, 101), (12, 1000), (123, 10001)]),)
+    assert signer.call_args_list[5] == ((33, 102, [(12, 1000), (123, 10001)]),)
+    assert signer.call_args_list[6] == ((12, 101, [(123, 10001)]),)

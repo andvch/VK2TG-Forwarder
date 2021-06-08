@@ -24,6 +24,7 @@ class Attachment:
     """
 
     def __init__(self, type: str, **kwargs):
+        """Конструктор класса Attachment."""
         self.__dict__ = kwargs
         self.type = type
 
@@ -51,8 +52,8 @@ class ConvertedMessage:
 
     """
 
-    def __init__(self, vk_message: dict, attachment_group_limit: int=10,
-            forwarders: list=[]):
+    def __init__(self, vk_message: dict, attachment_group_limit: int = 10, forwarders: list = []):
+        """Конструктор класса ConvertedMessage."""
         self.author_id = vk_message['from_id']
         self.date = vk_message['date']
         self.text = vk_message.get('text', '')
@@ -90,7 +91,7 @@ class ConvertedMessage:
     @staticmethod
     def parse_attachment(
             data: dict,
-            file_downloader: Callable[[str], Any]=lambda url: requests.get(url).content
+            file_downloader: Callable[[str], Any] = lambda url: requests.get(url).content
     ) -> Attachment:
         """Конвертирует вложение из ВК для отправки в Телеграм.
 
@@ -191,9 +192,9 @@ class ConvertedMessage:
         return a
 
     def send(self, bot: Bot, tg_chat_id: int,
-            signer: Callable[[], Any]=lambda *args, **kwargs: '') -> int:
+             signer: Callable[[], Any] = lambda *args, **kwargs: '') -> int:
         """Отправляет сообщение в Телеграм-чат.
-        
+
         Args:
             bot (:class:`telegram.Bot`): Бот, через которого будет осуществлена отправка.
             tg_chat_id (:obj:`int`): Чат, в который будет отправлено сообщение.
@@ -265,6 +266,7 @@ class ConvertedForwardedMessages:
     """
 
     def __init__(self, vk_message: dict):
+        """Конструктор класса ConvertedForwardedMessages."""
         self.messages = []
         self.num_messages_to_send = 0
         self.author_ids = set()
@@ -288,9 +290,9 @@ class ConvertedForwardedMessages:
         return bool(self.num_messages_to_send)
 
     def send(self, bot: Bot, tg_chat_id: int,
-            signer: Callable[[], Any]=lambda *args, **kwargs: '') -> int:
+             signer: Callable[[], Any] = lambda *args, **kwargs: '') -> int:
         """Отправляет сообщение в Телеграм-чат.
-        
+
         Args:
             bot (:class:`telegram.Bot`): Бот, через которого будет осуществлена отправка.
             tg_chat_id (:obj:`int`): Чат, в который будет отправлено сообщение.

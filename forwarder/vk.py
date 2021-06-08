@@ -9,18 +9,22 @@ class VkApi:
 
     Args:
         token (:obj:`str`): Уникальный код ВК-бота.
-        wait (:obj:`int`, optional):.
+        wait (:obj:`int`, optional): Время timeout (сколько секунд ждать прежде, чеи сдаться).
+
     """
+
     api_version = '5.130'
     lp_version = '3'
     new_message_event_type = 4
 
     def __init__(self, token, wait=25):
+        """Конструктор класса VkApi."""
         self.token = token
         self.wait = wait
         self.__get_server()
 
     def __get_server(self, update_ts=True):
+        """Отправляет GET request'у."""
         params = {'access_token': self.token,
                   'v': self.api_version,
                   'lp_version': self.lp_version}
@@ -33,6 +37,7 @@ class VkApi:
             self.ts = response['ts']
 
     def listen(self):
+        """Мониторинг пришедших сообщений в ВК."""
         while True:
             params = {'act': 'a_check',
                       'key': self.key,
@@ -68,6 +73,7 @@ class VkApi:
                     yield messages[message_id]
 
     def get_messages(self, message_ids):
+        """Парсим вложенные сообщения."""
         params = {'access_token': self.token,
                   'v': self.api_version,
                   'message_ids': ','.join(map(str, set(message_ids)))}
@@ -76,6 +82,7 @@ class VkApi:
         return dict([(message['id'], message) for message in response['items']])
 
     def get_names(self, ids):
+        """Парсим имена из вложенных сообщений."""
         users, groups = set(), set()
         for vk_id in ids:
             if vk_id > 0:
@@ -107,6 +114,7 @@ class VkApi:
         return result
 
     def send_message(self, text, user_id, reply_to=None):
+        """Отправляем сообщения в ВК."""
         random_id = random.randint(-2**31, 2**31 - 1)
         params = {'access_token': self.token,
                   'v': self.api_version,

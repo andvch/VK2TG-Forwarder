@@ -18,7 +18,8 @@ from config import (
     TG_RE_REGISTRATION_MESSAGE,
     TG_NEW_REGISTRATION_MESSAGE,
     VK_SUCCESS_REGISTRATION_MESSAGE,
-    VK_FAILED_REGISTRATION_MESSAGE
+    VK_FAILED_REGISTRATION_MESSAGE,
+    send_message_text
 )
 
 cd_tg_dict = {}
@@ -71,7 +72,7 @@ def vk_mainloop(vk, bot):
     """Обработка сообщений ВК."""
     for vk_message in vk.listen():
         if vk_message['from_id'] < 0:
-            continue #  drops own messages
+            continue  # drops own messages
 
         if vk_message['text'] in cd_tg_dict:
             if vk_message['from_id'] in vk_tg_dict:
@@ -96,7 +97,7 @@ def vk_mainloop(vk, bot):
 
         sig = Signer(vk.get_names(message.author_ids), date_format=DATE_FORMAT)
         num = message.send(bot, vk_tg_dict[vk_message['from_id']], sig)
-        vk.send_message(f'Доставлено {num} из {message.num_messages_to_send} сообщений',
+        vk.send_message(send_message_text(num, message.num_messages_to_send),
                         vk_message['from_id'],
                         vk_message['id'])
 

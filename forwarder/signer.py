@@ -1,8 +1,6 @@
 """Описание класса, который указывает авторов сообщений и время отправки сообщений."""
 
 from datetime import datetime
-import locale
-locale.setlocale(locale.LC_ALL, '')
 
 
 class Signer:

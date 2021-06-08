@@ -1,0 +1,96 @@
+# English translations for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-06-08 13:44+0300\n"
+"PO-Revision-Date: 2021-06-08 13:46+0300\n"
+"Last-Translator: Nikita Pimenov <nikitapimenov0702@gmail.com>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: config.py:13
+msgid "Доставлено "
+msgstr "Delivered "
+
+#: config.py:13
+msgid " из "
+msgstr " of "
+
+#: config.py:14
+msgid "сообщения"
+msgid_plural "сообщений"
+msgstr[0] "message"
+msgstr[1] "messages"
+
+#: config.py:25
+msgid "Ваша прошлая связка \"ВК-Telegram\" была удалена."
+msgstr "Your previous link \"VK-Telegram\" has been removed."
+
+#: config.py:26
+msgid ""
+"Чтобы получать сообщения из ВК в данный диалог, напишите пароль из "
+"следующего сообщения боту в ВК: https://vk.com/im?sel=-204978468\n"
+"Чтобы удалить свои данные, нажмите команду \"/detach\"."
+msgstr ""
+"To receive messages from VK to this dialogue, write the password from the"
+" following message to the bot in VK: https://vk.com/im?sel=-204978468\n"
+"To delete your data, enter the command \"/detach\"."
+
+#: config.py:30
+msgid ""
+"Ваши данные отсутствуют. Для того, чтобы зарегистрироваться, нажмите "
+"команду \"/start\"."
+msgstr "Your data is missing. To register, enter the command \"/start\"."
+
+#: config.py:32
+msgid ""
+"Ваши данные были удалены. Для того, чтобы снова зарегистрироваться, "
+"нажмите команду \"/start\"."
+msgstr ""
+"Your data has been deleted. To register again, enter the command "
+"\"/start\"."
+
+#: config.py:34
+msgid ""
+"Если вы хотите изменить адресанта сообщений в ВК, нажмите команду "
+"\"/start\"."
+msgstr ""
+"If you want to change the addressee of messages in VK, enter the command "
+"\"/start\"."
+
+#: config.py:36
+msgid ""
+"Здравствуйте!\n"
+"Чтобы зарегистрироваться и иметь возможность пересылать себе сообщения из"
+" ВК (подробнее: https://github.com/andvch/VK2TG-Forwarder) нажмите "
+"команду \"/start\"."
+msgstr ""
+"Hello!\n"
+"To register and be able to forward messages from VK to yourself (for more"
+" details: https://github.com/andvch/VK2TG-Forwarder) enter the command "
+"\"/start\"."
+
+#: config.py:41
+msgid ""
+"Поздравляем!\n"
+"Теперь вы можете писать сюда сообщения и они будут пересланы "
+"зарегистрированному вами аккаунту в Telegram."
+msgstr ""
+"Congratulations!\n"
+"Now you can write messages here and they will be forwarded to your "
+"registered Telegram account ."
+
+#: config.py:44
+msgid "Вы не являетесь зарегистрированным участником. Напишите боту в Telegram: "
+msgstr "You are not a registered member. Write to the bot on Telegram: "
+

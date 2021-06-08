@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>messageconverter module &mdash; документация VK to TG forwarder 1.0</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> VK to TG forwarder
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">messageconverter module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">VK to TG forwarder</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>messageconverter module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/messageconverter.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-messageconverter">
+<span id="messageconverter-module"></span><h1>messageconverter module<a class="headerlink" href="#module-messageconverter" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Классы для конвертации и отправки сообщений в Телеграм.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="messageconverter.Attachment">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">messageconverter.</span></span><span class="sig-name descname"><span class="pre">Attachment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#messageconverter.Attachment" title="Ссылка на это определение">¶</a></dt>
+<dd><blockquote>
+<div><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</div></blockquote>
+<p>Вложение в Телеграм-сообщении.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>type (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Тип вложения (если вложение не текстовое,
+то должен совпадать с название в телеграм-API).
+kwargs: Параметры, которые будут использованы при отправке.</p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="messageconverter.Attachment.params">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#messageconverter.Attachment.params" title="Ссылка на это определение">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code>: Параметры вложения.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="messageconverter.ConvertedForwardedMessages">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">messageconverter.</span></span><span class="sig-name descname"><span class="pre">ConvertedForwardedMessages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vk_message</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#messageconverter.ConvertedForwardedMessages" title="Ссылка на это определение">¶</a></dt>
+<dd><blockquote>
+<div><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</div></blockquote>
+<p>Конвертированные вложенные сообщения из ВК, пригодные для отправки в Телеграм.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>vk_message (<code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code>): Сообщение, полученное из ВК.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="messageconverter.ConvertedForwardedMessages.send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">bot:</span> <span class="pre">telegram.bot.Bot</span></em>, <em class="sig-param"><span class="pre">tg_chat_id:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">signer:</span> <span class="pre">Callable[[]</span></em>, <em class="sig-param"><span class="pre">Any]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">ConvertedForwardedMessages.&lt;lambda&gt;&gt;</span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#messageconverter.ConvertedForwardedMessages.send" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Отправляет сообщение в Телеграм-чат.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>bot (<code class="xref py py-class docutils literal notranslate"><span class="pre">telegram.Bot</span></code>): Бот, через которого будет осуществлена отправка.
+tg_chat_id (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>): Чат, в который будет отправлено сообщение.
+signer (Callable, optional): Функция, принимающая упорядоченный
+в хронологическом порядке список List[(<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>)]
+пар id переславших сообщение и времени пересылки в формате Unix timestamp.</p>
+</dd>
+<dt>Returns:</dt><dd><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>: Число фактически отправленных сообщений.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="messageconverter.ConvertedMessage">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">messageconverter.</span></span><span class="sig-name descname"><span class="pre">ConvertedMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vk_message</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attachment_group_limit</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forwarders</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#messageconverter.ConvertedMessage" title="Ссылка на это определение">¶</a></dt>
+<dd><blockquote>
+<div><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</div></blockquote>
+<p>Конвертированное сообщение из ВК, пригодное для отправки в Телеграм.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>vk_message (<code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code>): Сообщение, полученное из ВК.
+attachment_group_limit (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, optional): Максимально допустимое количество
+вложений в одном отправляемом сообщении.
+forwarders (List[(<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>)], optional): Упорядоченный в хронологическом
+порядке список пар id переславших сообщение и времени пересылки в
+формате Unix timestamp.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="messageconverter.ConvertedMessage.parse_attachment">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_attachment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">data:</span> <span class="pre">dict,</span> <span class="pre">file_downloader:</span> <span class="pre">Callable[[str],</span> <span class="pre">Any]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">ConvertedMessage.&lt;lambda&gt;&gt;</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#messageconverter.Attachment" title="messageconverter.Attachment"><span class="pre">messageconverter.Attachment</span></a><a class="headerlink" href="#messageconverter.ConvertedMessage.parse_attachment" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Конвертирует вложение из ВК для отправки в Телеграм.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>data (<code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code>): Вложение, полученное из ВК.
+file_downloader (Callable, optional): Функция, принимающая
+прямую ссылку на данные и возвращающая эти данные.</p>
+</dd>
+<dt>Returns:</dt><dd><p><a class="reference internal" href="#messageconverter.Attachment" title="messageconverter.Attachment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attachment</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="messageconverter.ConvertedMessage.send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">bot:</span> <span class="pre">telegram.bot.Bot</span></em>, <em class="sig-param"><span class="pre">tg_chat_id:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">signer:</span> <span class="pre">Callable[[]</span></em>, <em class="sig-param"><span class="pre">Any]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">ConvertedMessage.&lt;lambda&gt;&gt;</span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#messageconverter.ConvertedMessage.send" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Отправляет сообщение в Телеграм-чат.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>bot (<code class="xref py py-class docutils literal notranslate"><span class="pre">telegram.Bot</span></code>): Бот, через которого будет осуществлена отправка.
+tg_chat_id (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>): Чат, в который будет отправлено сообщение.
+signer (Callable, optional): Функция, принимающая упорядоченный
+в хронологическом порядке список List[(<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>)]
+пар id переславших сообщение и времени пересылки в формате Unix timestamp.</p>
+</dd>
+<dt>Returns:</dt><dd><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>: Число фактически отправленных сообщений.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Andrey Chepurnov, Nikita Pimenov.
+
+    </p>
+  </div>
+    
+    
+    
+    Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

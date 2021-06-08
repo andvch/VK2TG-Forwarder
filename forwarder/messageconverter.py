@@ -1,22 +1,35 @@
-"""Классы для обработки вложений в сообщения."""
+"""Классы для конвертации и отправки сообщений в Телеграм."""
 
 from telegram import (  # noqa: F401
     InputMediaPhoto,
     InputMediaVideo,
     InputMediaAudio,
-    InputMediaDocument
+    InputMediaDocument,
+    Bot
 )
+
+from typing import Any, Callable
 
 import requests
 
 
 class Attachment:
-    def __init__(self, type, **kwargs):
+    """Вложение в Телеграм-сообщении.
+
+    Args:
+        type (:obj:`str`): Тип вложения (если вложение не текстовое,
+        то должен совпадать с название в телеграм-API).
+        kwargs: Параметры, которые будут использованы при отправке.
+
+    """
+
+    def __init__(self, type: str, **kwargs):
         self.__dict__ = kwargs
         self.type = type
 
     @property
-    def params(self):
+    def params(self) -> dict:
+        """:obj:`dict`: Параметры вложения."""
         p = self.__dict__.copy()
         for key, value in self.__dict__.items():
             if value is None:
@@ -26,7 +39,20 @@ class Attachment:
 
 
 class ConvertedMessage:
-    def __init__(self, vk_message, attachment_group_limit=10, forwarders=[]):
+    """Конвертированное сообщение из ВК, пригодное для отправки в Телеграм.
+
+    Args:
+        vk_message (:obj:`dict`): Сообщение, полученное из ВК.
+        attachment_group_limit (:obj:`int`, optional): Максимально допустимое количество
+        вложений в одном отправляемом сообщении.
+        forwarders (List[(:obj:`int`, :obj:`int`)], optional): Упорядоченный в хронологическом
+        порядке список пар id переславших сообщение и времени пересылки в
+        формате Unix timestamp.
+
+    """
+
+    def __init__(self, vk_message: dict, attachment_group_limit: int=10,
+            forwarders: list=[]):
         self.author_id = vk_message['from_id']
         self.date = vk_message['date']
         self.text = vk_message.get('text', '')
@@ -57,14 +83,26 @@ class ConvertedMessage:
                 self.attachment_groups.append(grouped_media[i: i + attachment_group_limit])
         self.attachment_groups.extend(non_grouped_media)
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
+        """Пустое ли сообщение."""
         return bool(self.text or self.text_attachments or self.attachment_groups)
 
     @staticmethod
     def parse_attachment(
-            data,
-            file_downloader=lambda url: requests.get(url).content
-    ):
+            data: dict,
+            file_downloader: Callable[[str], Any]=lambda url: requests.get(url).content
+    ) -> Attachment:
+        """Конвертирует вложение из ВК для отправки в Телеграм.
+
+        Args:
+            data (:obj:`dict`): Вложение, полученное из ВК.
+            file_downloader (Callable, optional): Функция, принимающая
+            прямую ссылку на данные и возвращающая эти данные.
+
+        Returns:
+            :class:`Attachment`
+
+        """
         a = Attachment(data['type'])
         data = data[a.type]
 
@@ -152,7 +190,21 @@ class ConvertedMessage:
 
         return a
 
-    def send(self, bot, tg_chat_id, signer=lambda *args, **kwargs: ''):
+    def send(self, bot: Bot, tg_chat_id: int,
+            signer: Callable[[], Any]=lambda *args, **kwargs: '') -> int:
+        """Отправляет сообщение в Телеграм-чат.
+        
+        Args:
+            bot (:class:`telegram.Bot`): Бот, через которого будет осуществлена отправка.
+            tg_chat_id (:obj:`int`): Чат, в который будет отправлено сообщение.
+            signer (Callable, optional): Функция, принимающая упорядоченный
+            в хронологическом порядке список List[(:obj:`int`, :obj:`int`)]
+            пар id переславших сообщение и времени пересылки в формате Unix timestamp.
+
+        Returns:
+            :obj:`int`: Число фактически отправленных сообщений.
+
+        """
         text = []
         if self.text:
             text.append(self.text)
@@ -205,7 +257,14 @@ class ConvertedMessage:
 
 
 class ConvertedForwardedMessages:
-    def __init__(self, vk_message):
+    """Конвертированные вложенные сообщения из ВК, пригодные для отправки в Телеграм.
+
+    Args:
+        vk_message (:obj:`dict`): Сообщение, полученное из ВК.
+
+    """
+
+    def __init__(self, vk_message: dict):
         self.messages = []
         self.num_messages_to_send = 0
         self.author_ids = set()
@@ -224,10 +283,25 @@ class ConvertedForwardedMessages:
         for fwd_message in vk_message.get('fwd_messages', []):
             self.__parse(fwd_message, forwarders)
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
+        """Пустое ли сообщение."""
         return bool(self.num_messages_to_send)
 
-    def send(self, bot, tg_chat_id, signer=lambda *args, **kwargs: ''):
+    def send(self, bot: Bot, tg_chat_id: int,
+            signer: Callable[[], Any]=lambda *args, **kwargs: '') -> int:
+        """Отправляет сообщение в Телеграм-чат.
+        
+        Args:
+            bot (:class:`telegram.Bot`): Бот, через которого будет осуществлена отправка.
+            tg_chat_id (:obj:`int`): Чат, в который будет отправлено сообщение.
+            signer (Callable, optional): Функция, принимающая упорядоченный
+            в хронологическом порядке список List[(:obj:`int`, :obj:`int`)]
+            пар id переславших сообщение и времени пересылки в формате Unix timestamp.
+
+        Returns:
+            :obj:`int`: Число фактически отправленных сообщений.
+
+        """
         ok_counter = 0
         for message in self.messages:
             ok_counter += message.send(bot, tg_chat_id, signer)

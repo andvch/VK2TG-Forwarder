@@ -1,4 +1,4 @@
-"""Программа запускает и обеспечивает работу 2 ботов: в ВК и в Telegram."""
+"""Запускает 2 потока для обработки сообщений в Телеграме и в ВК."""
 
 from string import ascii_letters, digits
 from random import choice
@@ -28,7 +28,7 @@ vk_tg_dict = {}
 
 
 def start(bot, _):
-    """Генерируем рандомный пароля для его ввода в ВК и создания канала передачи сообщений."""
+    """Обработчик Телеграмм-команды start. Генерирует ключ для связки аккаунтов."""
     if bot.effective_user.id in tg_cd_dict:
         cd_tg_dict.pop(tg_cd_dict[bot.effective_user.id])
         tg_cd_dict.pop(bot.effective_user.id)
@@ -46,7 +46,7 @@ def start(bot, _):
 
 
 def detach(bot, _):
-    """Удаляем старые связки для данного аккаунта в Telegram, если они существовали."""
+    """Обработчик Телеграмм-команды для удаления связки аккаунтов."""
     if (bot.effective_user.id not in tg_vk_dict) and (bot.effective_user.id not in tg_cd_dict):
         bot.message.reply_text(TG_FAILED_DETACH_MESSAGE)
     else:
@@ -60,7 +60,7 @@ def detach(bot, _):
 
 
 def print_answer(bot, _):
-    """Если сообщение польнователя не команда, приглашаем создать новую связку ВК-Telegram."""
+    """Обработчик Телеграмм-сообщений, которые не являются коммандами."""
     if bot.effective_user.id in tg_vk_dict:
         bot.message.reply_text(TG_RE_REGISTRATION_MESSAGE)
     else:
@@ -68,11 +68,10 @@ def print_answer(bot, _):
 
 
 def vk_mainloop(vk, bot):
-    """Обрабатываем сообщения, пришедшие боту в ВК."""
+    """Обработка сообщений ВК."""
     for vk_message in vk.listen():
-        # print(vk_message)
         if vk_message['from_id'] < 0:
-            continue
+            continue #  drops own messages
 
         if vk_message['text'] in cd_tg_dict:
             if vk_message['from_id'] in vk_tg_dict:
@@ -115,5 +114,3 @@ if __name__ == "__main__":
     updater.start_polling()
 
     vk_mainloop(vk, updater.bot)
-#    vk_thread = threading.Thread(target=vk_mainloop)
-#    tg_thread = threading.Thread(target=tg_mainloop)

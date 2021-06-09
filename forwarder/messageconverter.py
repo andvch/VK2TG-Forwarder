@@ -8,8 +8,8 @@ from telegram import (  # noqa: F401
     Bot
 )
 
+from telegram.error import TelegramError
 from typing import Any, Callable
-
 import requests
 
 
@@ -220,7 +220,7 @@ class ConvertedMessage:
             try:
                 bot.send_message(tg_chat_id, text)
                 ok_counter += 1
-            except:
+            except TelegramError:
                 pass
 
         for attachment_group in self.attachment_groups:
@@ -233,7 +233,7 @@ class ConvertedMessage:
                     eval(f"bot.send_{attachment.type}"
                          "(tg_chat_id, caption=text, **attachment.params)")
                     ok_counter += 1
-                except:
+                except TelegramError:
                     pass
                 continue
 
@@ -245,13 +245,13 @@ class ConvertedMessage:
                     params['caption'] = text
                 try:
                     media.append(eval(f"InputMedia{attachment.type.title()}(**params)"))
-                except:
+                except TelegramError:
                     pass
 
             try:
                 bot.send_media_group(tg_chat_id, media)
                 ok_counter += 1
-            except:
+            except TelegramError:
                 pass
 
         return ok_counter

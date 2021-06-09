@@ -1,7 +1,7 @@
 """Здесь хранятся константы и переменные с текстом сообщений."""
 
 import sys
-import os.path
+import os
 import gettext
 
 datapath = os.path.dirname(sys.argv[0])
@@ -16,8 +16,8 @@ def send_message_text(success_cnt, all_cnt):
                               all_cnt)
 
 
-TG_TOKEN = ""
-VK_TOKEN = ""
+TG_TOKEN = os.getenv('TG_BOT_TOKEN')
+VK_TOKEN = os.getenv('VK_BOT_TOKEN')
 
 DATE_FORMAT = "%d %B %Y в %H:%M %Z"
 PASSWORD_LENGTH = 8

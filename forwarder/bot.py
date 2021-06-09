@@ -3,10 +3,10 @@
 from string import ascii_letters, digits
 from random import choice
 from telegram.ext import Updater, Defaults, CommandHandler, MessageHandler, Filters
-from vk import VkApi
-from messageconverter import ConvertedForwardedMessages
-from signer import Signer
-from config import (
+from forwarder.vk import VkApi
+from forwarder.messageconverter import ConvertedForwardedMessages
+from forwarder.signer import Signer
+from forwarder.config import (
     TG_TOKEN,
     VK_TOKEN,
     DATE_FORMAT,
@@ -116,6 +116,7 @@ def main():
     updater.start_polling()
 
     vk_mainloop(vk, updater.bot)
+
 
 if __name__ == "__main__":
     main()
